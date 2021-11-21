@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from rest_framework.generics import CreateAPIView
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
 
 from accounts.models import User
 from accounts.serializers import UserSerializer, LoginSerializer
 
 
-class CreateUserView(CreateAPIView):
+class CreateUserView(mixins.CreateModelMixin, GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
