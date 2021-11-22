@@ -82,8 +82,3 @@ class MovieSerializer(serializers.ModelSerializer):
                 instance.genres.add(new_genre)
 
         return super().update(instance, validated_data)
-
-
-
-
-

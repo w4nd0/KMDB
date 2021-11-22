@@ -8,16 +8,17 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     UpdateAPIView,
 )
+from rest_framework.viewsets import ModelViewSet
+
 from utils.permissions import IsCriticoUser, IsSuperUserOrReadOnly
 
 from movies.models import Movies, Review
 from movies.serializers import MovieSerializer, ReviewSerializer, MovieWithReviewSerializer
 
-
 class SearchForTitle(filters.SearchFilter):
     search_param = "title"
 
-class MovieView(ListCreateAPIView):
+class MovieView(ModelViewSet):
     queryset = Movies.objects.all()
     serializer_class = MovieSerializer
 
@@ -27,17 +28,10 @@ class MovieView(ListCreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
 
-class RetrieveMovieView(RetrieveUpdateDestroyAPIView):
-    queryset = Movies.objects.all()
-    serializer_class = MovieSerializer
-
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsSuperUserOrReadOnly]
-
     def get_serializer_class(self):
-        user = self.request.user
-        
-        if not user.is_anonymous:
+        user = self.request.user     
+
+        if not user.is_anonymous and self.request.method != 'POST':
             return MovieWithReviewSerializer
         
         return super().get_serializer_class()
