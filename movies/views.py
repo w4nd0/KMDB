@@ -8,7 +8,9 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     UpdateAPIView,
 )
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import mixins
+
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from utils.permissions import IsCriticoUser, IsSuperUserOrReadOnly
 
@@ -37,7 +39,7 @@ class MovieView(ModelViewSet):
         return super().get_serializer_class()
 
 
-class ReviewView(ListAPIView):
+class ReviewView(mixins.ListModelMixin, GenericViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 

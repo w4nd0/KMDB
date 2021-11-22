@@ -6,10 +6,8 @@ from movies.views import MovieView, ReviewView, MovieReviewView
 router = routers.SimpleRouter()
 
 router.register(r'movies', MovieView, basename='movies')
+router.register(r'reviews', ReviewView, basename='reviews')
 
-urlpatterns = [
-    path("reviews/", ReviewView.as_view()),
-    path("movies/<int:pk>/review/", MovieReviewView.as_view()),
-]
+urlpatterns = [path("movies/<int:pk>/review/", MovieReviewView.as_view()),]
 
 urlpatterns += router.urls
