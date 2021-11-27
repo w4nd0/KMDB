@@ -7,29 +7,32 @@ from movies.models import Genres, Movies, Review
 
 ValidationError.status_code = 422
 
+
 class GenresSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genres
         fields = ["id", "name"]
 
+
 class CriticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "first_name", "last_name"]
-        
+
+
 class ReviewSerializer(serializers.ModelSerializer):
     critic = CriticSerializer(read_only=True)
 
     class Meta:
         model = Review
         fields = "__all__"
-        
-        extra_kwargs = {
-            'movie': {'write_only': True}
-        }
+
+        extra_kwargs = {"movie": {"write_only": True}}
 
     def create(self, validated_data):
-        check_already_reviewed = Review.objects.filter(critic_id=self.context["request"].user.id).filter(movie_id=validated_data['movie'].id)
+        check_already_reviewed = Review.objects.filter(
+            critic_id=self.context["request"].user.id
+        ).filter(movie_id=validated_data["movie"].id)
 
         if check_already_reviewed:
             raise ValidationError({"detail": "You already made this review."})
@@ -38,9 +41,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             **validated_data, critic=self.context["request"].user
         )
 
-    def update(self, instance, validated_data):
-        validated_data["critic"] = self.context["request"].user
-        return super().update(instance, validated_data)
 
 class MovieWithReviewSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
@@ -50,8 +50,10 @@ class MovieWithReviewSerializer(serializers.ModelSerializer):
         model = Movies
         fields = "__all__"
 
+
 class MovieSerializer(serializers.ModelSerializer):
     genres = GenresSerializer(many=True)
+
     class Meta:
         model = Movies
         fields = "__all__"

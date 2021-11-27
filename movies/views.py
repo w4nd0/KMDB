@@ -1,24 +1,24 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import filters
+from rest_framework import filters, mixins
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView,
-    UpdateAPIView,
-)
-from rest_framework import mixins
-
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
-
+from utils.mixins import CreateUpdateViewSet
 from utils.permissions import IsCriticoUser, IsSuperUserOrReadOnly
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 from movies.models import Movies, Review
-from movies.serializers import MovieSerializer, ReviewSerializer, MovieWithReviewSerializer
+from movies.serializers import (
+    MovieSerializer,
+    MovieWithReviewSerializer,
+    ReviewSerializer,
+)
+
 
 class SearchForTitle(filters.SearchFilter):
     search_param = "title"
+
 
 class MovieView(ModelViewSet):
     queryset = Movies.objects.all()
@@ -31,12 +31,50 @@ class MovieView(ModelViewSet):
     permission_classes = [IsSuperUserOrReadOnly]
 
     def get_serializer_class(self):
-        user = self.request.user     
+        user = self.request.user
 
-        if not user.is_anonymous and self.request.method != 'POST':
+        if not user.is_anonymous and self.request.method != "POST":
             return MovieWithReviewSerializer
-        
+
         return super().get_serializer_class()
+
+    def get_object(self):
+        user = self.request.user
+
+        if self.action == "review":
+            return Review.objects.filter(critic_id=user.id, movie_id=self.kwargs["pk"])
+
+        return super().get_object()
+
+    @action(
+        methods=["post", "put"],
+        detail=True,
+        permission_classes=[IsCriticoUser],
+        serializer_class=ReviewSerializer,
+    )
+    def review(self, request, *args, **kwargs):
+        movie = get_object_or_404(Movies, id=kwargs["pk"])
+
+        if request.method == "POST":
+            request.data["movie"] = movie.id
+
+            return super().create(request, *args, **kwargs)
+
+        else:
+            review = self.get_object()
+            request.data["critic"] = self.request.user
+
+            review.update(**request.data)
+
+            try:
+                serializer = ReviewSerializer(review[0])
+
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            except IndexError:
+                return Response(
+                    {"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND
+                )
 
 
 class ReviewView(mixins.ListModelMixin, GenericViewSet):
@@ -55,7 +93,7 @@ class ReviewView(mixins.ListModelMixin, GenericViewSet):
         return super().filter_queryset(queryset)
 
 
-class MovieReviewView(UpdateAPIView, CreateAPIView):
+class MovieReviewView(CreateUpdateViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
@@ -63,7 +101,7 @@ class MovieReviewView(UpdateAPIView, CreateAPIView):
     permission_classes = [IsCriticoUser]
 
     def create(self, request, *args, **kwargs):
-        movie = get_object_or_404(Movies, id=kwargs.get("pk"))
+        movie = get_object_or_404(Movies, id=kwargs["pk"])
 
         request.data["movie"] = movie.id
 

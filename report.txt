@@ -31,126 +31,77 @@ Running migrations:
   Applying movies.0002_alter_review_stars... OK
   Applying movies.0003_alter_review_movie... OK
   Applying sessions.0001_initial... OK
+[<URLPattern '^movies/$' [name='movies-list']>, <URLPattern '^movies/(?P<pk>[^/.]+)/$' [name='movies-detail']>, <URLPattern '^movies/(?P<pk>[^/.]+)/review/$' [name='movies-review']>, <URLPattern '^reviews/$' [name='reviews-list']>]
 System check identified no issues (0 silenced).
-test_user_has_information_fields (accounts.tests.tests_model.UserModelTest) ... ok
-test_login_invalid_credentials (accounts.tests.tests_views.LoginViewTest) ... ok
-test_login_missing_fields (accounts.tests.tests_views.LoginViewTest) ... ok
-test_login_success (accounts.tests.tests_views.LoginViewTest) ... ok
-test_create_new_user (accounts.tests.tests_views.UserViewTest) ... ok
-test_create_user_with_same_username (accounts.tests.tests_views.UserViewTest) ... ok
-test_create_user_with_wrong_body_on_request (accounts.tests.tests_views.UserViewTest) ... ok
-test_genre_has_information_fields (movies.tests.tests_models.GenresModelTest) ... ok
-test_genre_movie_relationship (movies.tests.tests_models.MoviesModelTest) ... ok
-test_movie_has_information_fields (movies.tests.tests_models.MoviesModelTest) ... ok
-test_review_has_information_fields (movies.tests.tests_models.MoviesModelTest) ... ok
-test_review_movie_relationship (movies.tests.tests_models.MoviesModelTest) ... ok
-test_review_user_relationship (movies.tests.tests_models.MoviesModelTest) ... ok
-test_can_read_a_specific_film_with_authentication (movies.tests.tests_views.MovieViewTest) ... FAIL
-test_can_read_a_specific_film_without_authentication (movies.tests.tests_views.MovieViewTest) ... FAIL
-test_comum_user_cannot_create_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_comum_user_cannot_delete_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_comum_user_cannot_update_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_create_new_movie_as_admim (movies.tests.tests_views.MovieViewTest) ... ok
-test_create_new_movie_with_wrong_request_format (movies.tests.tests_views.MovieViewTest) ... ok
-test_create_new_movie_without_permission (movies.tests.tests_views.MovieViewTest) ... ok
-test_critico_cannot_create_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_critico_cannot_delete_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_critico_cannot_update_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_delete_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_delete_movie_with_wrong_id (movies.tests.tests_views.MovieViewTest) ... ok
-test_delete_movie_without_permission (movies.tests.tests_views.MovieViewTest) ... ok
-test_list_movies (movies.tests.tests_views.MovieViewTest) ... FAIL
-test_list_movies_empty (movies.tests.tests_views.MovieViewTest) ... ok
-test_read_a_specific_film_with_wrong_id (movies.tests.tests_views.MovieViewTest) ... ok
-test_update_movie (movies.tests.tests_views.MovieViewTest) ... ok
-test_update_movie_with_wrong_id (movies.tests.tests_views.MovieViewTest) ... ok
-test_update_movie_with_wrong_request_format (movies.tests.tests_views.MovieViewTest) ... FAIL
-test_update_movie_without_permission (movies.tests.tests_views.MovieViewTest) ... ok
-test_admim_user_cannot_create_review (movies.tests.tests_views.ReviewModelTest) ... ok
-test_admim_user_cannot_update_review (movies.tests.tests_views.ReviewModelTest) ... ok
-test_cannot_create_review_with_stars_out_from_1_to_10 (movies.tests.tests_views.ReviewModelTest) ... FAIL
-test_comum_user_cannot_create_review (movies.tests.tests_views.ReviewModelTest) ... ok
-test_comum_user_cannot_update_review (movies.tests.tests_views.ReviewModelTest) ... ok
-test_create_review_with_wrong_movie_id (movies.tests.tests_views.ReviewModelTest) ... ok
-test_create_review_without_authorization (movies.tests.tests_views.ReviewModelTest) ... ok
-test_create_review_without_with_wrong_request_format (movies.tests.tests_views.ReviewModelTest) ... FAIL
-test_critic_cannot_create_review_twice_for_same_movie (movies.tests.tests_views.ReviewModelTest) ... ok
-test_critico_can_create_review (movies.tests.tests_views.ReviewModelTest) ... ok
-test_critico_can_update_review (movies.tests.tests_views.ReviewModelTest) ... FAIL
-test_list_reviews_as_admim (movies.tests.tests_views.ReviewModelTest) ... ok
-test_list_reviews_as_comum_user (movies.tests.tests_views.ReviewModelTest) ... ok
-test_list_reviews_as_critico (movies.tests.tests_views.ReviewModelTest) ... ok
-test_list_reviews_without_permission (movies.tests.tests_views.ReviewModelTest) ... ok
-test_update_review_with_wrong_movie_id (movies.tests.tests_views.ReviewModelTest) ... ok
-test_update_review_without_authorization (movies.tests.tests_views.ReviewModelTest) ... ok
-test_update_review_without_with_wrong_request_format (movies.tests.tests_views.ReviewModelTest) ... FAIL
+test_create_and_login_for_admin_account (test_api.TestAccountView) ... ok
+test_create_and_login_for_critic_account (test_api.TestAccountView) ... ok
+test_create_and_login_for_user_account (test_api.TestAccountView) ... ok
+test_create_user_already_exists (test_api.TestAccountView) ... FAIL
+test_login_non_existing_user (test_api.TestAccountView) ... ok
+test_missing_login_data (test_api.TestAccountView) ... ok
+test_wrong_credentials_do_not_login (test_api.TestAccountView) ... ok
+test_admin_cannot_create_review (test_api.TestCriticismReviewView) ... ok
+test_admin_cannot_update_review (test_api.TestCriticismReviewView) ... ok
+test_cannot_create_review_with_invalid_stars (test_api.TestCriticismReviewView) ... FAIL
+test_create_review_without_movie (test_api.TestCriticismReviewView) ... ok
+test_critic_can_create_review (test_api.TestCriticismReviewView) ... ok
+test_critic_can_update_review (test_api.TestCriticismReviewView) ... ok
+test_critic_cannot_duplicate_review (test_api.TestCriticismReviewView) ... ok
+test_update_review_from_unexisting_movie (test_api.TestCriticismReviewView) ... ok
+test_update_review_that_doesnt_exist (test_api.TestCriticismReviewView) ... ok
+test_user_cannot_create_review (test_api.TestCriticismReviewView) ... ok
+test_user_cannot_update_review (test_api.TestCriticismReviewView) ... ok
+test_admin_can_view_all_reviews (test_api.TestListReview) ... ok
+test_anonymous_cannot_view_reviews (test_api.TestListReview) ... ok
+test_critic_can_view_only_own_reviews (test_api.TestListReview) ... ok
+test_user_cannot_view_reviews (test_api.TestListReview) ... ok
+test_admin_can_delete_movie (test_api.TestMovieRetrieveDestroyView) ... ok
+test_anonymous_can_filter_movies (test_api.TestMovieRetrieveDestroyView) ... ok
+test_anonymous_cannot_delete_movies (test_api.TestMovieRetrieveDestroyView) ... ok
+test_anonymous_cannot_filter_movies_with_the_invalid_movie_id (test_api.TestMovieRetrieveDestroyView) ... ok
+test_anonymous_filter_movie_without_critic (test_api.TestMovieRetrieveDestroyView) ... ok
+test_critic_cannot_delete_movies (test_api.TestMovieRetrieveDestroyView) ... ok
+test_user_cannot_delete_movies (test_api.TestMovieRetrieveDestroyView) ... ok
+test_user_filter_movie_with_critic (test_api.TestMovieRetrieveDestroyView) ... ok
+test_admin_can_create_movie (test_api.TestMovieView) ... ok
+test_anonymous_can_list_movies (test_api.TestMovieView) ... ok
+test_anonymous_cannot_create_movie (test_api.TestMovieView) ... ok
+test_anonymous_cannot_update_movie (test_api.TestMovieView) ... ok
+test_critic_cannot_create_movie (test_api.TestMovieView) ... ok
+test_critic_cannot_update_movie (test_api.TestMovieView) ... ok
+test_filter_movies_with_the_filter_request (test_api.TestMovieView) ... ok
+test_genre_cannot_repeat (test_api.TestMovieView) ... FAIL
+test_only_admin_can_update_movie (test_api.TestMovieView) ... ok
+test_output_format_data (test_api.TestMovieView) ... ok
+test_user_cannot_create_movie (test_api.TestMovieView) ... ok
+test_user_cannot_update_movie (test_api.TestMovieView) ... ok
 
 ======================================================================
-FAIL: test_can_read_a_specific_film_with_authentication (movies.tests.tests_views.MovieViewTest)
+FAIL: test_create_user_already_exists (test_api.TestAccountView)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 130, in test_can_read_a_specific_film_with_authentication
-    self.assertEquals(movie.data, response.data)
-AssertionError: {'id': 1, 'genres': [OrderedDict([('id', 1), ('name'[128 chars]est'} != {'id': 1, 'reviews': [], 'genres': [OrderedDict([('i[143 chars]est'}
-
-======================================================================
-FAIL: test_can_read_a_specific_film_without_authentication (movies.tests.tests_views.MovieViewTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 145, in test_can_read_a_specific_film_without_authentication
-    self.assertEquals(movie.data, response.data)
-AssertionError: {'id': 1, 'genres': [OrderedDict([('id', 1)[137 chars]est'} != {'detail': ErrorDetail(string='Invalid toke[62 chars]ed')}
-
-======================================================================
-FAIL: test_list_movies (movies.tests.tests_views.MovieViewTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 108, in test_list_movies
-    self.assertIn(movie.data, response.data)
-AssertionError: {'detail': ErrorDetail(string='You do not have permission to perform this action.', code='permission_denied')} not found in []
-
-======================================================================
-FAIL: test_update_movie_with_wrong_request_format (movies.tests.tests_views.MovieViewTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 186, in test_update_movie_with_wrong_request_format
+  File "/home/wander/1a Sprint/e5-kmdb/test_api.py", line 709, in test_create_user_already_exists
     self.assertEqual(response.status_code, 400)
 AssertionError: 422 != 400
 
 ======================================================================
-FAIL: test_cannot_create_review_with_stars_out_from_1_to_10 (movies.tests.tests_views.ReviewModelTest)
+FAIL: test_cannot_create_review_with_invalid_stars (test_api.TestCriticismReviewView)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 409, in test_cannot_create_review_with_stars_out_from_1_to_10
+  File "/home/wander/1a Sprint/e5-kmdb/test_api.py", line 1042, in test_cannot_create_review_with_invalid_stars
     self.assertEqual(response.status_code, 400)
 AssertionError: 422 != 400
 
 ======================================================================
-FAIL: test_create_review_without_with_wrong_request_format (movies.tests.tests_views.ReviewModelTest)
+FAIL: test_genre_cannot_repeat (test_api.TestMovieView)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 369, in test_create_review_without_with_wrong_request_format
-    self.assertEqual(response.status_code, 400)
-AssertionError: 422 != 400
-
-======================================================================
-FAIL: test_critico_can_update_review (movies.tests.tests_views.ReviewModelTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 455, in test_critico_can_update_review
-    self.assertEqual(response.status_code, 200)
-AssertionError: 404 != 200
-
-======================================================================
-FAIL: test_update_review_without_with_wrong_request_format (movies.tests.tests_views.ReviewModelTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/wander/1a Sprint/e-4-km-db/movies/tests/tests_views.py", line 473, in test_update_review_without_with_wrong_request_format
-    self.assertEqual(response.status_code, 400)
-AssertionError: 404 != 400
+  File "/home/wander/1a Sprint/e5-kmdb/test_api.py", line 174, in test_genre_cannot_repeat
+    self.assertEqual(movie_1["genres"][1]["id"], movie_2["genres"][0]["id"])
+AssertionError: 2 != 3
 
 ----------------------------------------------------------------------
-Ran 52 tests in 13.475s
+Ran 42 tests in 23.089s
 
-FAILED (failures=8)
+FAILED (failures=3)
 Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
